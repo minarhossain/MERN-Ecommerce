@@ -10,6 +10,8 @@
     morgan - api request ar upor console print korba get/post/put/delete request kina
 6. Test Api With Postman
 7. Middleware (simple is loggedIn middleware creating and texting for api purpose)
-8. Express Error Handling Middleware body-parser
-9. Handling http-errors all project and create and Error
+8. Express Error Handling Middleware: -> body-parser
+9. Handling all project and create and Error : -> http-errors
+10. Secure the api : -> xss-clean, express-rate-limit( আমরা একটা এপিআই তে বার বার রিকুয়েস্ট করি তাহলে এক মিনিটে আমাদের রিকুয়েস্ট কন্ডিশন সংখ্যার বেশি হলে মেসেজ দিবে যেমন এক মিনিটে পাচ বার এর বেশি হলে যদি কন্ডিশন দেয় তাহলে এই মেসেজ দিবে)
 
+11. configure dotenv and create .env and declare secret file for security
