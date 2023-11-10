@@ -7,7 +7,7 @@
 3.  Create Express Server
 4.  HTTP Request and response
 5. Nodemon and morgan (HTTP request logger middleware for node.js) package install
-morgan - api request ar upor console print korba get/post/put/delete request kina
+    morgan - api request ar upor console print korba get/post/put/delete request kina
 6. Test Api With Postman
-
+7. Middleware 
 
