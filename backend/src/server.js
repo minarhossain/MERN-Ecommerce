@@ -3,8 +3,8 @@ const mongodbConnection = require("./config/db");
 const { serverPort } = require("./secret");
 
 
-app.listen(serverPort, () => {
+app.listen(serverPort, async () => {
     console.log(`Server running  http://localhost:${serverPort}`);
-    mongodbConnection();
+    await mongodbConnection();
 })
 

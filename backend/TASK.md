@@ -17,3 +17,6 @@
 11. configure dotenv and create .env and declare secret file for security
 12. MVC Architecture 
 13. Mongodb database connection with mongoose (mongodb atlas and mongodb shell)
+
+14. userSchema and userModel (mongodb is a bson data format) for User
+15. create seed route for testing

@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const router = require("./routers/userRouter");
+const seedRouter = require("./routers/seedRouter");
 
 const app = express();
 
@@ -33,6 +34,8 @@ app.use(rateLimiter)
 // users Router
 
 app.use("/api/v1", router)
+
+app.use("/api/seed", seedRouter)
 
 
 
