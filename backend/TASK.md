@@ -15,4 +15,5 @@
 10. Secure the api : -> xss-clean, express-rate-limit( আমরা একটা এপিআই তে বার বার রিকুয়েস্ট করি তাহলে এক মিনিটে আমাদের রিকুয়েস্ট কন্ডিশন সংখ্যার বেশি হলে মেসেজ দিবে যেমন এক মিনিটে পাচ বার এর বেশি হলে যদি কন্ডিশন দেয় তাহলে এই মেসেজ দিবে)
 
 11. configure dotenv and create .env and declare secret file for security
-12. MVC Architecture
+12. MVC Architecture 
+13. Mongodb database connection with mongoose (mongodb atlas and mongodb shell)

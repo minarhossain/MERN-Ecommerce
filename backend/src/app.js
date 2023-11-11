@@ -4,6 +4,7 @@ const createError = require('http-errors');
 const bodyParser = require('body-parser');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
+const router = require("./routers/userRouter");
 
 const app = express();
 
@@ -29,14 +30,13 @@ app.use(rateLimiter)
 
 
 
+// users Router
+
+app.use("/api/v1", router)
 
 
 
-app.get('/home', (req, res) => {
 
-    console.log("Home is Running")
-    res.status(200).json({ message: "GET:  Hello World" })
-})
 
 // client error handling (client and server error will be work both one will not be work)
 app.use((req, res, next) => {
