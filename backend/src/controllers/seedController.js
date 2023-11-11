@@ -6,7 +6,6 @@ const seedUser = async (req, res, next) => {
         // deleting all existing users
         await User.deleteMany({})
 
-
         // inserting new users from own make data
         await User.insertMany(data.users)
         res.status(200).json({ message: "Data Inserted", data: data.users })

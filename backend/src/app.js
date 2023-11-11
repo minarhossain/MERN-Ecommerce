@@ -4,7 +4,7 @@ const createError = require('http-errors');
 const bodyParser = require('body-parser');
 const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
-const router = require("./routers/userRouter");
+const userRouter = require("./routers/userRouter");
 const seedRouter = require("./routers/seedRouter");
 
 const app = express();
@@ -13,7 +13,7 @@ const app = express();
 
 const rateLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+    max: 15, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
     message: "Too many requests from this IP, please try again after 15 minutes",
 
 })
@@ -32,10 +32,8 @@ app.use(rateLimiter)
 
 
 // users Router
-
-app.use("/api/v1", router)
-
-app.use("/api/seed", seedRouter)
+app.use("/api/user", userRouter);
+app.use("/api/seed", seedRouter);
 
 
 
