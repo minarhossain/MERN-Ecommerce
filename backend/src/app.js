@@ -6,6 +6,7 @@ const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const userRouter = require("./routers/userRouter");
 const seedRouter = require("./routers/seedRouter");
+const { errorResponse } = require("./controllers/responseController");
 
 const app = express();
 
@@ -32,7 +33,7 @@ app.use(rateLimiter)
 
 
 // users Router
-app.use("/api/user", userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/seed", seedRouter);
 
 
@@ -44,13 +45,22 @@ app.use((req, res, next) => {
     next(createError(404, "From http-errors Route Not Found"))
 })
 
-// Server error handling
-app.use((err, req, res, next) => {
-    return res.status(err.status || 500).json({
-        success: false,
-        message: err.message,
+// Server error handling -> all the errors
+
+app.use((error, req, res, next) => {
+    return errorResponse(res, {
+        statusCode: error.status,
+        message: error.message
     })
-})
+});
+
+
+// app.use((err, req, res, next) => {
+//     return res.status(err.status || 500).json({
+//         success: false,
+//         message: err.message,
+//     })
+// })
 
 // handle express client error handling if any wrong api hit will show this message
 // app.use((req, res, next) => {

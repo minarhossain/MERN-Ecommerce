@@ -21,3 +21,6 @@
 14. userSchema and userModel (mongodb is a bson data format) for User
 15. create seed route for testing and inserting some dummy data in database
 16. GET api/users -> isAdmin -> getAllUsers -> searchByName + pagination Functionality from database 
+
+17. responseHandler controller for error or success
+18. get a single user by his id GET/:id -> api/users/:id 
