@@ -1,8 +1,13 @@
 const createError = require('http-errors');
 const mongoose = require('mongoose');
+const fs = require('fs').promises;
 
 const User = require('../models/userModel');
 const { successResponse } = require('./responseController');
+const { findWithId } = require('../services/findItem');
+const { deleteImage } = require('../helper/deleteImage');
+const { createJSONWebToken } = require('../helper/jsonwebtoken');
+const { jsonSecretKey } = require('../secret');
 
 // get all users and by his pagination
 const getUsers = async (req, res, next) => {
@@ -59,33 +64,98 @@ const getUsers = async (req, res, next) => {
 }
 
 
+
 // get a single user by his id
 
-const getUser = async (req, res, next) => {
+const getUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
         const options = { password: 0 }
-        const user = await User.findById(id, options);
-        if (!user) throw createError(404, "User Does not exist with this id")
-
+        const user = await findWithId(User, id, options);
         return successResponse(res, {
             statusCode: 200,
-            message: "User Was Returned Successfully",
+            message: "User Returned Successfully",
             payload: {
                 user: user
             }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+
+const deleteUserById = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const options = { password: 0 };
+        const user = await findWithId(User, id, options);
+
+        const userImagePath = user.image;
+
+        deleteImage(userImagePath)
+
+        // fs.access(userImagePath, (error) => {
+        //     if (error) {
+        //         console.error('User Image Does not exists')
+
+        //     } else {
+        //         fs.unlink(userImagePath, (error) => {
+        //             if (error) throw error;
+        //             console.log("User image is deleted")
+        //         })
+        //     }
+        // })
+
+        await User.findByIdAndDelete({
+            _id: id,
+            isAdmin: false
         })
 
+        return successResponse(res, {
+            statusCode: 200,
+            message: "User Delete Successfully!",
+        });
     } catch (error) {
-        if (error instanceof mongoose.Error) {
-            next(createError(404, "Invalid User Id"));
-            return;
+        next(error)
+
+    }
+}
+
+
+// Process Register
+const processRegister = async (req, res, next) => {
+    try {
+        const { name, email, password, phone, address } = req.body;
+        const userExists = await User.exists({ email: email });
+        if (userExists) {
+            throw createError(409, "User Already Exists, Please Login")
         }
+
+        // create webtoken with json
+        const token = createJSONWebToken({ name, email, password, phone, address }, jsonSecretKey, '10m');
+        console.log(token);
+
+        const newUser = {
+            name, email, password, phone, address
+        }
+        console.log(newUser)
+        return successResponse(res, {
+            statusCode: 200,
+            message: "User Create Successfully!",
+            payload: { token }
+
+        });
+    } catch (error) {
+        next(error)
 
     }
 }
 
 module.exports = {
     getUsers,
-    getUser
+    getUserById,
+    deleteUserById,
+    processRegister
 };

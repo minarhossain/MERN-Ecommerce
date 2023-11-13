@@ -24,3 +24,9 @@
 
 17. responseHandler controller for error or success
 18. get a single user by his id GET/:id -> api/users/:id 
+19. How to create services in the backend (findById()) anek bar khujar darkar hote pare tai amra akta alada 'service' folder create kore bar bar user korta pari
+
+20. DELETE a user by his id api/users/:id
+21. Refactoring findWithId take Model to find Model theka
+22. delete image helper (database related we use service and otehr wise we use helper)
+23. POST /api/users -> create an user
