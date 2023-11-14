@@ -7,7 +7,7 @@ const { successResponse } = require('./responseController');
 const { findWithId } = require('../services/findItem');
 const { deleteImage } = require('../helper/deleteImage');
 const { createJSONWebToken } = require('../helper/jsonwebtoken');
-const { jsonSecretKey } = require('../secret');
+const { jsonSecretKey, clientURL } = require('../secret');
 
 // get all users and by his pagination
 const getUsers = async (req, res, next) => {
@@ -135,7 +135,19 @@ const processRegister = async (req, res, next) => {
 
         // create webtoken with json
         const token = createJSONWebToken({ name, email, password, phone, address }, jsonSecretKey, '10m');
-        console.log(token);
+
+        // prepare email
+        const emailData = {
+            email,
+            subject: 'Account Activation Mail',
+            html: `
+            <h2>Hello ${name} !</h2>
+            <p>Please Click here to <a href="${clientURL}/api/users/activate/${token}" target="_blank">activate your account</a></p>
+            `
+        }
+
+
+        // send email with nodemailer
 
         const newUser = {
             name, email, password, phone, address

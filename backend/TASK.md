@@ -30,3 +30,5 @@
 21. Refactoring findWithId take Model to find Model theka
 22. delete image helper (database related we use service and otehr wise we use helper)
 23. POST /api/users -> create an user
+24. create jwt function for using again time
+25. prepare smtp and email send
