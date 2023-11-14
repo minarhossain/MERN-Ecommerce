@@ -8,6 +8,7 @@ const { findWithId } = require('../services/findItem');
 const { deleteImage } = require('../helper/deleteImage');
 const { createJSONWebToken } = require('../helper/jsonwebtoken');
 const { jsonSecretKey, clientURL } = require('../secret');
+const emailWithNodemailer = require('../helper/email');
 
 // get all users and by his pagination
 const getUsers = async (req, res, next) => {
@@ -129,6 +130,7 @@ const processRegister = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
         const userExists = await User.exists({ email: email });
+
         if (userExists) {
             throw createError(409, "User Already Exists, Please Login")
         }
@@ -146,16 +148,19 @@ const processRegister = async (req, res, next) => {
             `
         }
 
-
         // send email with nodemailer
+        try {
 
-        const newUser = {
-            name, email, password, phone, address
+            await emailWithNodemailer(emailData)
+        } catch (error) {
+            next(createError(500, "Fail to Send Verification email"));
+            return
         }
-        console.log(newUser)
+
+
         return successResponse(res, {
             statusCode: 200,
-            message: "User Create Successfully!",
+            message: `Please Go to your email for completing your ${email} registration`,
             payload: { token }
 
         });
