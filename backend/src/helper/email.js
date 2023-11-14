@@ -22,7 +22,6 @@ const emailWithNodemailer = async (emailData) => {
             html: emailData.html, // html body
         };
 
-
         const info = await transporter.sendMail(mailOptions);
         console.log('Message Sent : ', info.response)
 

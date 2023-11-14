@@ -33,3 +33,4 @@
 24. create jwt function for using again time
 25. prepare smtp and email sending environment
 26. send email with nodemailer
+27. Post : api/users/verify -> verify + register in to database
