@@ -34,3 +34,5 @@
 25. prepare smtp and email sending environment
 26. send email with nodemailer
 27. Post : api/users/verify -> verify + register in to database
+28. How to upload image from backend file management that means image audio video pdf msdocs ppx etc (multer package install)
+29. File size and file type filtering

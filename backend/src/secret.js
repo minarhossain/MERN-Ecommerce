@@ -8,7 +8,9 @@ const jsonSecretKey = process.env.JWT_ACTIVATION_KEY;
 const smtpUser = process.env.SMTP_USER;
 const smtpPassword = process.env.SMTP_PASSWORD;
 
-const clientURL = process.env.CLIENT_URL
+const clientURL = process.env.CLIENT_URL;
+const uploadFile = process.env.UPLOAD_FILE || 'public/images/users';
+
 
 
 module.exports = {
@@ -18,5 +20,6 @@ module.exports = {
     jsonSecretKey,
     smtpUser,
     smtpPassword,
-    clientURL
+    clientURL,
+    uploadFile
 }
