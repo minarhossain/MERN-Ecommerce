@@ -181,6 +181,7 @@ const activateUserAccount = async (req, res, next) => {
         try {
             const decoded = jwt.verify(token, jsonSecretKey);
             if (!decoded) throw createError(401, "Unable to verify user");
+            
             const userExists = await User.exists({ email: decoded.email });
             if (userExists) {
                 throw createError(409, "User with this email already exists. Please sign in")
