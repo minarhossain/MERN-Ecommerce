@@ -1,5 +1,11 @@
 # E-commerce MERN Stack Project
 
+// module system = require('dotenv').config();
+
+// import system from
+// import dotenv from 'dotenv';
+// dotenv.config({path:'./env'})
+
 ## Basic Setup
 
 1.  Planing for e-commerce
@@ -37,3 +43,6 @@
 28. How to upload image from backend file management that means image audio video pdf msdocs ppx etc (multer package install)
 29. File size and file type filtering
 30. Refactoring file uploading
+31. express-validator using for form input field validation (validators folder index.js and auth.js after that user userRegistration route)
+32. storing image as buffering
+33. updateUserById put method

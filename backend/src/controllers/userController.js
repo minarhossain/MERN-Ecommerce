@@ -1,5 +1,4 @@
 const createError = require('http-errors');
-const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const fs = require('fs').promises;
 
@@ -126,10 +125,16 @@ const deleteUserById = async (req, res, next) => {
 }
 
 
+
 // Process Register
 const processRegister = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
+
+
+        const imageBufferString = req.file.buffer.toString('base64');
+        console.log("Image Buffer", imageBufferString);
+
         const userExists = await User.exists({ email: email });
 
         if (userExists) {
@@ -137,7 +142,7 @@ const processRegister = async (req, res, next) => {
         }
 
         // create webtoken with json
-        const token = createJSONWebToken({ name, email, password, phone, address }, jsonSecretKey, '10m');
+        const token = createJSONWebToken({ name, email, password, phone, address, image: imageBufferString }, jsonSecretKey, '10m');
 
         // prepare email
         const emailData = {
@@ -162,7 +167,9 @@ const processRegister = async (req, res, next) => {
         return successResponse(res, {
             statusCode: 200,
             message: `Please Go to your email for completing your ${email} registration`,
-            payload: { token }
+
+            payload: { token: token }
+
 
         });
     } catch (error) {
@@ -181,7 +188,7 @@ const activateUserAccount = async (req, res, next) => {
         try {
             const decoded = jwt.verify(token, jsonSecretKey);
             if (!decoded) throw createError(401, "Unable to verify user");
-            
+
             const userExists = await User.exists({ email: decoded.email });
             if (userExists) {
                 throw createError(409, "User with this email already exists. Please sign in")
@@ -211,10 +218,44 @@ const activateUserAccount = async (req, res, next) => {
 }
 
 
+const updateUserById = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const option = {};
+        const user = findWithId(User, userId, option);
+
+        const updateOptions = { new: true, runValidators: true, context: 'query' }
+        let updates = {};
+
+        // name, email, phone, password, image, address
+        if (req.body.name) {
+            updates.name = req.body.name;
+        }
+        if (req.body.phone) {
+            updates.phone = req.body.phone;
+        }
+        if (req.body.image) {
+            updates.image = req.body.image;
+        }
+        if (req.body.address) {
+            updates.address = req.body.address;
+        }
+
+        return successResponse(res, {
+            statusCode: 200,
+            message: 'User update successfully',
+            payload: {}
+        })
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getUsers,
     getUserById,
     deleteUserById,
     processRegister,
-    activateUserAccount
+    activateUserAccount,
+    updateUserById
 };

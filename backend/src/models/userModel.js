@@ -32,13 +32,14 @@ const userSchema = new mongoose.Schema({
         }
     },
     image: {
-        type: String,
-        default: defaultImagePath,
+        type: Buffer,
+        contentType: String,
+        required: [true, 'User image is required']
     },
     address: {
         type: String,
         required: [true, "User address required"],
-        minlength: [3, 'The length of user address can be minimum 6 characters']
+        minlength: [3, 'Address should be minimum 3 characters']
 
     },
     phone: {
