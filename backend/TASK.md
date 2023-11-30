@@ -48,3 +48,4 @@
 33. updateUserById put method 
 34. user login with jwt and set token in the cookie
 35. user logout controller
+36. logged in Middleware
