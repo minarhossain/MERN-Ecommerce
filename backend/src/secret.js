@@ -4,6 +4,7 @@ const mongodbUrl = process.env.MONGODB_ATLAS_URL || 'mongodb://localhost:27017/M
 
 const defaultImagePath = process.env.USER_DEFAULT_IMAGE || 'public/images/default.png';
 const jsonSecretKey = process.env.JWT_ACTIVATION_KEY;
+const jwtAccessKey = process.env.JWT_ACCESS_KEY;
 
 const smtpUser = process.env.SMTP_USER;
 const smtpPassword = process.env.SMTP_PASSWORD;
@@ -21,5 +22,6 @@ module.exports = {
     smtpUser,
     smtpPassword,
     clientURL,
-    uploadFile
+    uploadFile,
+    jwtAccessKey
 }

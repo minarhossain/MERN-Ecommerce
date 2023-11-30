@@ -12,7 +12,7 @@ userRouter.post('/process-register', upload.single('image'), validateUserRegistr
 userRouter.post('/verify', activateUserAccount)
 userRouter.get('/:id', getUserById)
 userRouter.delete('/:id', deleteUserById)
-userRouter.put('/:id', updateUserById)
+userRouter.put('/:id', upload.single('image'), updateUserById)
 
 
 module.exports = userRouter;

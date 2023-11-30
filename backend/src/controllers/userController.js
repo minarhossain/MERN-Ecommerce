@@ -64,10 +64,7 @@ const getUsers = async (req, res, next) => {
     }
 }
 
-
-
 // get a single user by his id
-
 const getUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -85,8 +82,7 @@ const getUserById = async (req, res, next) => {
     }
 }
 
-
-
+// delete user by is
 const deleteUserById = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -125,15 +121,19 @@ const deleteUserById = async (req, res, next) => {
 }
 
 
-
 // Process Register
 const processRegister = async (req, res, next) => {
     try {
         const { name, email, password, phone, address } = req.body;
-
+        const image = req.file;
+        if (!image) {
+            throw createError(400, 'Image file is required')
+        }
+        if (image.size > 1024 * 1024 * 2) {
+            throw createError(400, 'File too large. It will be max 2 MB')
+        }
 
         const imageBufferString = req.file.buffer.toString('base64');
-        console.log("Image Buffer", imageBufferString);
 
         const userExists = await User.exists({ email: email });
 
@@ -157,11 +157,23 @@ const processRegister = async (req, res, next) => {
         // send email with nodemailer
         try {
 
-            // await emailWithNodemailer(emailData)
+            await emailWithNodemailer(emailData)
         } catch (error) {
             next(createError(500, "Fail to Send Verification email"));
             return
         }
+
+        // const newUser = new User({
+        //     name,
+        //     email,
+        //     password, // Note: Password should be hashed before saving to the database for security reasons
+        //     phone,
+        //     address,
+        //     image: imageBufferString,
+        // });
+
+        // await newUser.save();
+
 
 
         return successResponse(res, {
@@ -178,7 +190,7 @@ const processRegister = async (req, res, next) => {
     }
 }
 
-
+// activision user with token
 const activateUserAccount = async (req, res, next) => {
 
     try {
@@ -217,34 +229,56 @@ const activateUserAccount = async (req, res, next) => {
 
 }
 
-
+// update user by id image and everything without email
 const updateUserById = async (req, res, next) => {
     try {
         const userId = req.params.id;
-        const option = {};
-        const user = findWithId(User, userId, option);
+        const options = { password: 0 };
+        const user = await findWithId(User, userId, options)
 
         const updateOptions = { new: true, runValidators: true, context: 'query' }
         let updates = {};
 
         // name, email, phone, password, image, address
-        if (req.body.name) {
-            updates.name = req.body.name;
+        /*   if (req.body.name) {
+              updates.name = req.body.name;
+          }
+          if (req.body.password) {
+              updates.password = req.body.password;
+          }
+          if (req.body.phone) {
+              updates.phone = req.body.phone;
+          }
+  
+          if (req.body.address) {
+              updates.address = req.body.address;
+          }
+   */
+        for (let key in req.body) {
+            if (['name', 'password', 'phone', 'address'].includes(key)) {
+                updates[key] = req.body[key];
+            }
         }
-        if (req.body.phone) {
-            updates.phone = req.body.phone;
+
+
+        const image = req.file;
+        if (image) {
+            if (image.size > 1024 * 1024 * 2) {
+                throw createError(400, 'File too large. It will be max 2 MB')
+            }
+            updates.image = image.buffer.toString('base64');
         }
-        if (req.body.image) {
-            updates.image = req.body.image;
-        }
-        if (req.body.address) {
-            updates.address = req.body.address;
+
+        // const options = { password: 0 };
+        const updatedUser = await User.findByIdAndUpdate(userId, updates, updateOptions)
+        if (!updatedUser) {
+            throw createError(404, 'User with this id does not exists')
         }
 
         return successResponse(res, {
             statusCode: 200,
             message: 'User update successfully',
-            payload: {}
+            payload: updatedUser
         })
     } catch (error) {
         next(error);

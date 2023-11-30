@@ -45,4 +45,6 @@
 30. Refactoring file uploading
 31. express-validator using for form input field validation (validators folder index.js and auth.js after that user userRegistration route)
 32. storing image as buffering
-33. updateUserById put method
+33. updateUserById put method 
+34. user login with jwt and set token in the cookie
+35. user logout controller
